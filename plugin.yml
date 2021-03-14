@@ -1,0 +1,11 @@
+name: ServerDashboard
+
+main: Baleine\ServerDashboard\Main
+
+version: 2.0.1
+
+api: 3.17.2
+
+load: POSTWORLD
+
+author: Baleine

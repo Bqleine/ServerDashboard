@@ -1,0 +1,10 @@
+Normal timings:
+	- [**|****] <name> Time: <time> Count: <count> Avg: <avg> Violations:  <violations>
+	- Full Server Tick Time: 128784895 Count: 81 Avg: 1589937 Violations: 2
+
+Tasks timings:
+	- Task: <name> Runnable: <runnable> Time: <time> Count: <count> Avg: <avg> Violations:  <violations>
+	- Task: DEVirion v1.2.7 Runnable: anonymous@plugins/DEVirion.phar/src/poggit/virion/devirion/DEVirion#L101(interval:1) Time: 385761 Count: 81 Avg: 4762 Violations: 0
+Additional data:
+	- # <data>
+	- Sample time <value [\d()]>
