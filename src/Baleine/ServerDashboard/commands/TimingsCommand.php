@@ -87,7 +87,7 @@ class TimingsCommand extends Command {
                 ];
                 fclose($fileTimings);
 
-                $host = $sender->getServer()->getProperty("timings.host", "82.65.175.189:3000/api/v1/timings");
+                $host = Main::$api . "/api/v1/timings"
 
                 $sender->getServer()->getAsyncPool()->submitTask(new class($sender, $host, $agent, $data) extends BulkCurlTask{
                     /** @var string */
