@@ -87,7 +87,7 @@ class TimingsCommand extends Command {
                 ];
                 fclose($fileTimings);
 
-                $host = Main::$api . "/api/v1/timings"
+                $host = Main::$api . "/api/v1/timings";
 
                 $sender->getServer()->getAsyncPool()->submitTask(new class($sender, $host, $agent, $data) extends BulkCurlTask{
                     /** @var string */
@@ -103,7 +103,7 @@ class TimingsCommand extends Command {
                     public function __construct(CommandSender $sender, string $host, string $agent, array $data){
                         parent::__construct([
                             [
-                                "page" => "http://$host?upload=true",
+                                "page" => "https://$host?upload=true",
                                 "extraOpts" => [
                                     CURLOPT_HTTPHEADER => [
                                         "User-Agent: $agent",
@@ -133,7 +133,7 @@ class TimingsCommand extends Command {
                         $response = json_decode($result[0], true);
                         if(is_array($response) && isset($response["id"])){
                             Command::broadcastCommandMessage($sender, new TranslationContainer("pocketmine.command.timings.timingsRead",
-                                ["http://" . $this->host . "?id=" . $response["id"]]));
+                                ["https://" . $this->host . "?id=" . $response["id"]]));
                         }else{
                             Command::broadcastCommandMessage($sender, new TranslationContainer("pocketmine.command.timings.pasteError"));
                         }

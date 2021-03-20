@@ -27,13 +27,16 @@ class Main extends PluginBase implements Listener {
 
     public static $enabled = true;
 
-    public static $api = "185.157.247.91:3000";
+    public static $api = "api.serverdashboard.me:3000";
 
     public $enabledWebhooks;
 
     public $token;
 
 	public function onEnable() : void{
+
+	    $this->initSocketIOClient();
+
 	    $this->token = strval($this->getConfig()->get("token"));
 	    if ($this->token === false) {
 	        $this->getLogger()->warning("Couldn't initialise ServerDashboard : missing token in config");
@@ -72,6 +75,10 @@ class Main extends PluginBase implements Listener {
 
 		self::$instance = $this;
 	}
+
+	public function initSocketIOClient() {
+
+    }
 
 	public function onDataPacketReceive(DataPacketReceiveEvent $event) {
 	    if (!self::$enabled) return;
