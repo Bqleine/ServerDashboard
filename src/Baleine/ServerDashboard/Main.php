@@ -27,7 +27,7 @@ class Main extends PluginBase implements Listener {
 
     public static $enabled = true;
 
-    public static $api = "api.serverdashboard.me:3000";
+    public static $api = "api.serverdashboard.me";
 
     public $enabledWebhooks;
 
