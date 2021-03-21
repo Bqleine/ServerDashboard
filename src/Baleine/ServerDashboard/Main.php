@@ -112,7 +112,7 @@ class Main extends PluginBase implements Listener {
         if (!self::$enabled) return [];
 
         $defaults = [
-            CURLOPT_URL => $this::$api . "/api/v1/server/webhooks?token=" . $this->token . "&list=true",
+            CURLOPT_URL => $this::$api . "/v1/server/webhooks?token=" . $this->token . "&list=true",
             CURLOPT_RETURNTRANSFER => true,
         ];
 
@@ -125,7 +125,7 @@ class Main extends PluginBase implements Listener {
 
     public function checkToken($token) : bool {
         $defaults = [
-            CURLOPT_URL => $this::$api . "/api/v1/server/check?token=" . $token,
+            CURLOPT_URL => $this::$api . "/v1/server/check?token=" . $token,
             CURLOPT_RETURNTRANSFER => true,
         ];
 
@@ -142,7 +142,7 @@ class Main extends PluginBase implements Listener {
         $params = ["token" => $this->token, "playerCount" => $playerCount, "tps" => $tps, "loadedChunks" => $loadedChunks];
 
         $defaults = [
-            CURLOPT_URL => $this::$api . "/api/v1/server/main-statistics",
+            CURLOPT_URL => $this::$api . "/v1/server/main-statistics",
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => http_build_query($params),
             CURLOPT_RETURNTRANSFER => true,
@@ -157,7 +157,7 @@ class Main extends PluginBase implements Listener {
         $params = ["token" => $this->token, "username" => $username, "deviceOS" => $deviceOS];
 
         $defaults = [
-            CURLOPT_URL => $this::$api . "/api/v1/server/player-statistics",
+            CURLOPT_URL => $this::$api . "/v1/server/player-statistics",
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => http_build_query($params),
             CURLOPT_RETURNTRANSFER => true,
@@ -174,7 +174,7 @@ class Main extends PluginBase implements Listener {
             if ($args !== "") $params["args"] = $args;
             
             $defaults = [
-                CURLOPT_URL => $this::$api . "/api/v1/server/webhooks?send=true",
+                CURLOPT_URL => $this::$api . "/v1/server/webhooks?send=true",
                 CURLOPT_POST => true,
                 CURLOPT_POSTFIELDS => http_build_query($params),
                 CURLOPT_RETURNTRANSFER => true,
