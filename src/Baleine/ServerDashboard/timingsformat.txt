@@ -9,7 +9,7 @@ Tasks timings:
 	- Task: DEVirion v1.2.7 Runnable: anonymous@plugins/DEVirion.phar/src/poggit/virion/devirion/DEVirion#L101(interval:1) Time: 385761 Count: 81 Avg: 4762 Violations: 0
 
 Event timings:
-    - Plugin: <name> Event: <event> Time: <time> Count: <count> Avg: <avg> Violations:  <violations>
+	- Plugin: <name> Event: <event> Time: <time> Count: <count> Avg: <avg> Violations:  <violations>
 
 Additional data:
 	- # <data>
