@@ -6,6 +6,7 @@ namespace Baleine\ServerDashboard;
 
 use Baleine\ServerDashboard\commands\TimingsCommand;
 use Baleine\ServerDashboard\tasks\CurlTask;
+use Baleine\ServerDashboard\tasks\MainStatsTask;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\event\Listener;
@@ -29,6 +30,8 @@ class Main extends PluginBase implements Listener {
 
     public static $api = "api.serverdashboard.me";
 
+    public static $version = "2.0.2";
+
     public $enabledWebhooks;
 
     public $token;
@@ -36,30 +39,19 @@ class Main extends PluginBase implements Listener {
 	public function onEnable() : void{
 	    $this->token = strval($this->getConfig()->get("token"));
 	    if ($this->token === false) {
-	        $this->getLogger()->warning("Couldn't initialise ServerDashboard : missing token in config");
+	        $this->getLogger()->error("Couldn't initialise ServerDashboard : missing token");
 	        $this::$enabled = false;
 	        return;
         }
 	    if (!$this->checkToken($this->token)) {
-            $this->getLogger()->warning("Couldn't initialise ServerDashboard : wrong token");
+            $this->getLogger()->error("Couldn't initialise ServerDashboard : wrong token");
             $this::$enabled = false;
             return;
         }
 
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
 
-		$this->getScheduler()->scheduleRepeatingTask(new ClosureTask(
-		    function (int $currentTick) : void{
-		        $server = $this->getServer();
-		        $playerCount = count($server->getOnlinePlayers());
-		        $tps = $server->getTicksPerSecondAverage();
-                $loadedChunks = 0;
-                foreach ($this->getServer()->getLevels() as $level) {
-                    $loadedChunks += count($level->getChunks());
-                }
-                $this->sendMainStats($playerCount, $tps, $loadedChunks);
-            }
-        ), 100);
+		$this->getScheduler()->scheduleRepeatingTask(new MainStatsTask(), 100);
 
 		$commandMap = $this->getServer()->getCommandMap();
 
@@ -126,7 +118,23 @@ class Main extends PluginBase implements Listener {
 
         curl_setopt_array($ch, $defaults);
 
-        return curl_exec($ch) === "true";
+        $result = curl_exec($ch);
+
+        if (curl_getinfo($ch, CURLINFO_HTTP_CODE) !== 200) {
+            return false;
+        }
+
+        $json = json_decode($result, true);
+
+        foreach ($json["messages"] as $message) {
+            $this->getLogger()->warning($message);
+        }
+
+        if (self::$version !== $json["version"]) {
+            $this->getLogger()->warning("A new version of ServerDashboard is available. Please download it or updated features may work incorrectly");
+        }
+
+        return true;
     }
 
 	public function sendMainStats($playerCount, $tps, $loadedChunks) {
@@ -145,7 +153,7 @@ class Main extends PluginBase implements Listener {
     }
 
     public function sendPlayerStats($username, $deviceOS) {
-        if (!self::$enabled) return ;
+        if (!self::$enabled) return;
 
         $params = ["token" => $this->token, "username" => $username, "deviceOS" => $deviceOS];
 

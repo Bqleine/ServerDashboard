@@ -2,9 +2,9 @@ name: ServerDashboard
 
 main: Baleine\ServerDashboard\Main
 
-version: 2.0.1
+version: 2.0.2
 
-api: 3.17.2
+api: 3.18.0
 
 load: POSTWORLD
 
