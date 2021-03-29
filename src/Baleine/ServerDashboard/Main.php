@@ -30,7 +30,7 @@ class Main extends PluginBase implements Listener {
 
     public static $api = "api.serverdashboard.me";
 
-    public static $version = "2.0.2";
+    public static $version = "2.0.3";
 
     public $enabledWebhooks;
 

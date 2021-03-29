@@ -7,15 +7,17 @@ namespace Baleine\ServerDashboard\commands;
 use Baleine\ServerDashboard\Main;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
+use pocketmine\command\PluginIdentifiableCommand;
 use pocketmine\command\utils\InvalidCommandSyntaxException;
 use pocketmine\lang\TranslationContainer;
 use pocketmine\Player;
+use pocketmine\plugin\Plugin;
 use pocketmine\scheduler\BulkCurlTask;
 use pocketmine\Server;
 use pocketmine\timings\TimingsHandler;
 use pocketmine\utils\InternetException;
 
-class TimingsCommand extends Command {
+class TimingsCommand extends Command implements PluginIdentifiableCommand {
     public function __construct(string $name){
         parent::__construct(
             $name,
@@ -23,6 +25,10 @@ class TimingsCommand extends Command {
             "%pocketmine.command.timings.usage"
         );
         $this->setPermission("pocketmine.command.timings");
+    }
+
+    public function getPlugin(): Plugin {
+        return Main::$instance;
     }
 
     public function execute(CommandSender $sender, string $commandLabel, array $args){

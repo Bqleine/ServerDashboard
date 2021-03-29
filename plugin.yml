@@ -2,7 +2,7 @@ name: ServerDashboard
 
 main: Baleine\ServerDashboard\Main
 
-version: 2.0.2
+version: 2.0.3
 
 api: 3.18.0
 
