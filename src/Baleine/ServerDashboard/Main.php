@@ -26,17 +26,37 @@ class Main extends PluginBase implements Listener {
     /** @var $instance Main */
     public static $instance;
 
+    /**
+     * Is the plugin enabled ?
+     * @var bool
+     */
     public static $enabled = true;
 
+    /**
+     * Api URL
+     * @var string
+     */
     public static $api = "api.serverdashboard.me";
 
+    /**
+     * This plugin version (same as in plugin.yml)
+     * @var string
+     */
     public static $version = "2.0.3";
 
+    /**
+     * List of enabled webhooks queried from the website in {@link getEnabledWebhooks() getEnabledWebhooks()}
+     * @var
+     */
     public $enabledWebhooks;
 
+    /**
+     * Access token
+     * @var
+     */
     public $token;
 
-	public function onEnable() : void{
+    public function onEnable() : void{
 	    $this->token = strval($this->getConfig()->get("token"));
 	    if ($this->token === false) {
 	        $this->getLogger()->error("Couldn't initialise ServerDashboard : missing token");
@@ -65,7 +85,11 @@ class Main extends PluginBase implements Listener {
 		self::$instance = $this;
 	}
 
-	public function onDataPacketReceive(DataPacketReceiveEvent $event) {
+    /**
+     * Used to get the user's operating system
+     * @param DataPacketReceiveEvent $event
+     */
+    public function onDataPacketReceive(DataPacketReceiveEvent $event) {
 	    if (!self::$enabled) return;
 
         $packet = $event->getPacket();
@@ -74,6 +98,13 @@ class Main extends PluginBase implements Listener {
 	    }
     }
 
+    /**
+     * @param CommandSender $sender
+     * @param Command $command
+     * @param string $label
+     * @param array $args
+     * @return bool
+     */
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
 	    if ($command->getName() === "sd-toggle") {
 	        if (count($args) === 0) {
@@ -93,6 +124,10 @@ class Main extends PluginBase implements Listener {
         return true;
     }
 
+    /**
+     * Queries enabled webhooks from the api
+     * @return array|false|string[]
+     */
     public function getEnabledWebhooks() {
         if (!self::$enabled) return [];
 
@@ -108,6 +143,11 @@ class Main extends PluginBase implements Listener {
         return explode(";", curl_exec($ch));
     }
 
+    /**
+     * Checks if the token is correct from the api
+     * @param $token
+     * @return bool
+     */
     public function checkToken($token) : bool {
         $defaults = [
             CURLOPT_URL => $this::$api . "/v1/server/check?token=" . $token,
@@ -137,7 +177,13 @@ class Main extends PluginBase implements Listener {
         return true;
     }
 
-	public function sendMainStats($playerCount, $tps, $loadedChunks) {
+    /**
+     * Sends server stats to api (mainly called by {@link MainStatsTask MainStatsTask})
+     * @param $playerCount
+     * @param $tps
+     * @param $loadedChunks
+     */
+    public function sendMainStats($playerCount, $tps, $loadedChunks) {
         if (!self::$enabled) return ;
 
         $params = ["token" => $this->token, "playerCount" => $playerCount, "tps" => $tps, "loadedChunks" => $loadedChunks];
@@ -152,6 +198,11 @@ class Main extends PluginBase implements Listener {
         $this->getServer()->getAsyncPool()->submitTask(new CurlTask($defaults));
     }
 
+    /**
+     * Sends a player's stats (called on login)
+     * @param $username
+     * @param $deviceOS
+     */
     public function sendPlayerStats($username, $deviceOS) {
         if (!self::$enabled) return;
 
@@ -167,6 +218,11 @@ class Main extends PluginBase implements Listener {
         $this->getServer()->getAsyncPool()->submitTask(new CurlTask($defaults));
     }
 
+    /**
+     * Sends webhook to api if enabled
+     * @param $trigger
+     * @param string $args
+     */
     public function sendWebhook($trigger, $args="") {
         if (!self::$enabled) return ;
 
@@ -191,7 +247,7 @@ class Main extends PluginBase implements Listener {
         $this->sendWebhook("disabled");
 	}
 
-	public function onLowMemory(LowMemoryEvent $event) {
+    public function onLowMemory(LowMemoryEvent $event) {
         if (!self::$enabled) return ;
 
         $this->sendWebhook("lowMemory");
