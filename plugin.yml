@@ -2,7 +2,7 @@ name: ServerDashboard
 
 main: Baleine\ServerDashboard\Main
 
-version: 2.0.3
+version: 2.1.0
 
 api: 3.18.0
 
@@ -13,8 +13,8 @@ author: Baleine
 commands:
   sd-toggle:
     usage: sd-toggle [on|off]
-    permission: sd
+    permission: serverdashboard
 
 permissions:
-  sd:
-    default: true
+  serverdashboard:
+    default: op

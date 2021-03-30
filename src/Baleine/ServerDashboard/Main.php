@@ -42,7 +42,7 @@ class Main extends PluginBase implements Listener {
      * This plugin version (same as in plugin.yml)
      * @var string
      */
-    public static $version = "2.0.3";
+    public static $version = "2.1.0";
 
     /**
      * List of enabled webhooks queried from the website in {@link getEnabledWebhooks() getEnabledWebhooks()}
@@ -171,7 +171,7 @@ class Main extends PluginBase implements Listener {
         }
 
         if (self::$version !== $json["version"]) {
-            $this->getLogger()->warning("A new version of ServerDashboard is available. Please download it or updated features may work incorrectly");
+            $this->getLogger()->warning("ServerDashboard version " . $json["version"] . " is available. Please download it or some features may work incorrectly");
         }
 
         return true;
@@ -199,14 +199,14 @@ class Main extends PluginBase implements Listener {
     }
 
     /**
-     * Sends a player's stats (called on login)
+     * Sends a player's stats (called on login) <b>Player is anonymised with {@link password_hash() password_hash}</b>
      * @param $username
      * @param $deviceOS
      */
     public function sendPlayerStats($username, $deviceOS) {
         if (!self::$enabled) return;
 
-        $params = ["token" => $this->token, "username" => $username, "deviceOS" => $deviceOS];
+        $params = ["token" => $this->token, "username" => hash("md5", $username), "deviceOS" => $deviceOS];
 
         $defaults = [
             CURLOPT_URL => $this::$api . "/v1/server/player-statistics",
