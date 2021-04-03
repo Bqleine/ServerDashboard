@@ -109,7 +109,7 @@ class TimingsCommand extends Command implements PluginIdentifiableCommand {
                     public function __construct(CommandSender $sender, string $host, string $agent, array $data){
                         parent::__construct([
                             [
-                                "page" => "https://$host?upload=true",
+                                "page" => "$host?upload=true",
                                 "extraOpts" => [
                                     CURLOPT_HTTPHEADER => [
                                         "User-Agent: $agent",
@@ -139,7 +139,7 @@ class TimingsCommand extends Command implements PluginIdentifiableCommand {
                         $response = json_decode($result[0], true);
                         if(is_array($response) && isset($response["id"])){
                             Command::broadcastCommandMessage($sender, new TranslationContainer("pocketmine.command.timings.timingsRead",
-                                ["https://" . $this->host . "?id=" . $response["id"]]));
+                                [$this->host . "?id=" . $response["id"]]));
                         }else{
                             Command::broadcastCommandMessage($sender, new TranslationContainer("pocketmine.command.timings.pasteError"));
                         }

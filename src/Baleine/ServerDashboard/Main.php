@@ -57,7 +57,8 @@ class Main extends PluginBase implements Listener {
     public $token;
 
     public function onEnable() : void{
-	    $this->token = strval($this->getConfig()->get("token"));
+        $config = $this->getConfig();
+	    $this->token = strval($config->get("token"));
 	    if ($this->token === false) {
 	        $this->getLogger()->error("Couldn't initialise ServerDashboard : missing token");
 	        $this::$enabled = false;
@@ -68,6 +69,8 @@ class Main extends PluginBase implements Listener {
             $this::$enabled = false;
             return;
         }
+
+	    self::$api = $config->get("api-url", "https://api.serverdashboard.me");
 
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
 
