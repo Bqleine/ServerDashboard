@@ -70,7 +70,7 @@ class Main extends PluginBase implements Listener {
             return;
         }
 
-	    self::$api = $config->get("api-url", "https://api.serverdashboard.me");
+	    self::$api = $config->get("api-url", "api.serverdashboard.me");
 
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
 
