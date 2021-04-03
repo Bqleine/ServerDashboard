@@ -42,7 +42,7 @@ class Main extends PluginBase implements Listener {
      * This plugin version (same as in plugin.yml)
      * @var string
      */
-    public static $version = "2.1.0";
+    public static $version = "2.1.2";
 
     /**
      * List of enabled webhooks queried from the website in {@link getEnabledWebhooks() getEnabledWebhooks()}
